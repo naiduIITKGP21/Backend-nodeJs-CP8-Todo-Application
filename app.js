@@ -37,7 +37,13 @@ app.get("/todos/", async (request, response) => {
       getTodosQuery = ` SELECT * FROM todo 
                        WHERE todo LIKE "%${search_q}%" 
                        AND priority = "${priority}"
-                       AND status = "${status}";`;
+                       AND status = '${status}';`;
+      break;
+
+    case status !== undefined:
+      getTodosQuery = `SELECT * FROM todo 
+      WHERE todo LIKE '%${search_q}%'
+      AND status = '${status}';`;
       break;
 
     case priority !== undefined:
@@ -45,16 +51,14 @@ app.get("/todos/", async (request, response) => {
                        WHERE todo LIKE "%${search_q}%" 
                        AND priority = "${priority}";`;
       break;
-    case status !== undefined:
-      getTodosQuery = ` SELECT * FROM todo 
-                       WHERE todo LIKE "${search_q}"
-                       AND status = "${status}";`;
-      break;
+
     default:
       getTodosQuery = ` SELECT * FROM todo 
                        WHERE todo LIKE "%${search_q}%";`;
   }
+
   console.log(getTodosQuery);
+
   const getTodosArray = await db.all(getTodosQuery);
   response.send(getTodosArray);
   console.log(getTodosArray);
@@ -107,17 +111,17 @@ WHERE id = ${todoId};
   const requestBody = request.body;
   switch (true) {
     case requestBody.status !== undefined:
-      updateColumn = "status";
+      updateColumn = "Status";
       break;
     case requestBody.priority !== undefined:
-      updateColumn = "priority";
+      updateColumn = "Priority";
       break;
     case requestBody.todo !== undefined:
-      updateColumn = "todo";
+      updateColumn = "Todo";
       break;
   }
 
-  response.send(`${updateColumn} updated`);
+  response.send(`${updateColumn} Updated`);
 });
 
 //API 5
@@ -127,3 +131,5 @@ app.delete("/todos/:todoId/", async (request, response) => {
   await db.run(deleteTodoQuery);
   response.send("Todo Deleted");
 });
+
+module.exports = app;
