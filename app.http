@@ -19,3 +19,10 @@ Content-Type: application/json
   "priority": "LOW",
   "status": "TO DO"
 }
+###
+PUT http://localhost:3000/todos/4/
+Content-Type: application/json
+
+{
+  "status": "DONE"
+}
